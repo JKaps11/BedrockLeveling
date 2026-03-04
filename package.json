@@ -1,0 +1,12 @@
+{
+  "name": "bedrock-mcmmo",
+  "version": "1.0.0",
+  "description": "McMMO addon for Minecraft Bedrock Edition",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@minecraft/server": "2.5.0",
+    "typescript": "^5.4.0"
+  }
+}
