@@ -1,0 +1,36 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "bedrocklvl:standing_cat",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/standing_cat"
+      },
+      "geometry": {
+        "default": "geometry.standing_cat"
+      },
+      "animations": {
+        "walk": "animation.standing_cat.walk",
+        "idle": "animation.standing_cat.idle",
+        "look_at_target": "animation.standing_cat.look_at_target"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "walk": "query.is_moving"
+          },
+          {
+            "idle": "!query.is_moving"
+          },
+          "look_at_target"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.standing_cat"
+      ]
+    }
+  }
+}
