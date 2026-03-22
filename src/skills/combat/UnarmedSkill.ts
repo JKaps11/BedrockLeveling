@@ -1,4 +1,4 @@
-import { Player, Entity, EquipmentSlot } from "@minecraft/server";
+import { Player, Entity, EquipmentSlot, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -22,7 +22,7 @@ export class UnarmedSkill extends BaseSkill {
     const bonusDamage = Math.min(level * IRON_ARM_DAMAGE_PER_LEVEL, IRON_ARM_MAX_BONUS);
     if (bonusDamage > 0) {
       try {
-        target.applyDamage(bonusDamage, { cause: "entityAttack" as any });
+        target.applyDamage(bonusDamage, { cause: EntityDamageCause.entityAttack });
       } catch {}
     }
 

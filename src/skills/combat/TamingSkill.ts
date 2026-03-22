@@ -1,11 +1,10 @@
-import { Player, Entity, world, system } from "@minecraft/server";
+import { Player, Entity, world, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
 import {
   TAMING_GORE_CHANCE_PER_LEVEL,
   TAMING_THICK_FUR_LEVEL,
-  TAMING_SHOCK_PROOF_LEVEL,
   TAMING_HOLY_HOUND_LEVEL,
   TAMING_FAST_FOOD_LEVEL,
   TAMING_FAST_FOOD_CHANCE
@@ -35,7 +34,7 @@ export class TamingSkill extends BaseSkill {
     // Gore: bonus bleed damage
     if (Math.random() * 100 < level * TAMING_GORE_CHANCE_PER_LEVEL) {
       try {
-        target.applyDamage(damage * 0.5, { cause: "entityAttack" as any });
+        target.applyDamage(damage * 0.5, { cause: EntityDamageCause.entityAttack });
       } catch {}
     }
 
@@ -48,6 +47,9 @@ export class TamingSkill extends BaseSkill {
         }
       } catch {}
     }
+
+    // Apply passive pet buffs (fire res, regen) on each attack
+    this.applyPetBuffs(player, wolf);
   }
 
   applyPetBuffs(player: Player, wolf: Entity): void {

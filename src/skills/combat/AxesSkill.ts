@@ -1,4 +1,4 @@
-import { Player, Entity } from "@minecraft/server";
+import { Player, Entity, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -19,7 +19,7 @@ export class AxesSkill extends BaseSkill {
     if (this.chanceCheck(player, CRITICAL_STRIKE_CHANCE_PER_LEVEL)) {
       const bonusDamage = damage * (CRITICAL_STRIKE_DAMAGE_MULT - 1);
       try {
-        target.applyDamage(bonusDamage, { cause: "entityAttack" as any });
+        target.applyDamage(bonusDamage, { cause: EntityDamageCause.entityAttack });
         player.sendMessage("§c§lCRITICAL HIT!");
       } catch {}
     }
@@ -34,7 +34,7 @@ export class AxesSkill extends BaseSkill {
       for (const entity of nearby) {
         if (entity.id === target.id) continue;
         try {
-          entity.applyDamage(damage * SKULL_SPLITTER_DAMAGE_MULT, { cause: "entityAttack" as any });
+          entity.applyDamage(damage * SKULL_SPLITTER_DAMAGE_MULT, { cause: EntityDamageCause.entityAttack });
         } catch {}
       }
     }

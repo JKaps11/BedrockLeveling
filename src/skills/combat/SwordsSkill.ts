@@ -1,4 +1,4 @@
-import { Player, Entity, system, world } from "@minecraft/server";
+import { Player, Entity, system, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -39,7 +39,7 @@ export class SwordsSkill extends BaseSkill {
       for (const entity of nearby) {
         if (entity.id === target.id) continue;
         try {
-          entity.applyDamage(damage * 0.5, { cause: "entityAttack" as any });
+          entity.applyDamage(damage * 0.5, { cause: EntityDamageCause.entityAttack });
           this.applyBleed(entity);
         } catch {}
       }
@@ -51,7 +51,7 @@ export class SwordsSkill extends BaseSkill {
     if (this.chanceCheck(player, COUNTER_ATTACK_CHANCE_PER_LEVEL)) {
       try {
         const counterDamage = damage * COUNTER_ATTACK_DAMAGE_MULT;
-        attacker.applyDamage(counterDamage, { cause: "entityAttack" as any });
+        attacker.applyDamage(counterDamage, { cause: EntityDamageCause.entityAttack });
         player.sendMessage("§6Counter Attack!");
       } catch {}
     }
@@ -74,7 +74,7 @@ export class SwordsSkill extends BaseSkill {
           this.bleedingEntities.delete(entityId);
           return;
         }
-        entity.applyDamage(BLEED_DAMAGE, { cause: "magic" as any });
+        entity.applyDamage(BLEED_DAMAGE, { cause: EntityDamageCause.magic });
         ticksRemaining--;
       } catch {
         system.clearRun(intervalId);

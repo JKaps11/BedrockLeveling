@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { world, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -27,7 +27,7 @@ export class TamingSkill extends BaseSkill {
         // Gore: bonus bleed damage
         if (Math.random() * 100 < level * TAMING_GORE_CHANCE_PER_LEVEL) {
             try {
-                target.applyDamage(damage * 0.5, { cause: "entityAttack" });
+                target.applyDamage(damage * 0.5, { cause: EntityDamageCause.entityAttack });
             }
             catch { }
         }
@@ -41,6 +41,8 @@ export class TamingSkill extends BaseSkill {
             }
             catch { }
         }
+        // Apply passive pet buffs (fire res, regen) on each attack
+        this.applyPetBuffs(player, wolf);
     }
     applyPetBuffs(player, wolf) {
         const level = this.getLevel(player);
