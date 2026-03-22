@@ -49,7 +49,8 @@ export class TamingSkill extends BaseSkill {
             const effect = wolf.getEffect(effectId);
             return !effect || effect.duration < threshold;
         }
-        catch {
+        catch (err) {
+            console.warn(`[Taming] needsRefresh failed for effect "${effectId}":`, err);
             return true;
         }
     }

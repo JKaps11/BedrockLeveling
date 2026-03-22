@@ -147,7 +147,6 @@ export class SkillManager {
       // Projectile (archery)
       if (damageSource.damagingProjectile && attacker.typeId === "minecraft:player") {
         this.archery.onArrowHit(attacker as Player, hurtEntity, damage);
-        return;
       }
 
       // Wolf attack → taming
@@ -254,6 +253,7 @@ export class SkillManager {
   }
 
   clearPlayer(playerId: string): void {
+    this.sneakingPlayers.delete(playerId);
     this.repair.clearPlayer(playerId);
   }
 
