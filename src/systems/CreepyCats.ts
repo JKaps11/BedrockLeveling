@@ -39,7 +39,8 @@ export class CreepyCats {
       });
 
       for (const cat of cats) {
-        if (!cat.getComponent("minecraft:is_tamed")) continue;
+        const tameable = cat.getComponent("minecraft:tameable");
+        if (!tameable || !(tameable as any).tamedToPlayer) continue;
         if (cat.getTags().includes("standing_cat_hidden")) continue;
 
         const lastTrigger = this.cooldowns.get(cat.id) ?? 0;
