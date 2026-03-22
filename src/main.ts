@@ -41,6 +41,7 @@ world.afterEvents.playerLeave.subscribe((event) => {
   const playerId = event.playerId;
   feedback.clearPlayer(playerId);
   abilityManager.clearPlayer(playerId);
+  skillManager.clearPlayer(playerId);
   // Player object is gone by now, but saveAllDirty in PlayerDataManager handles periodic saves
 });
 

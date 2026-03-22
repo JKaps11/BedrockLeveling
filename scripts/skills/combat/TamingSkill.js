@@ -44,17 +44,26 @@ export class TamingSkill extends BaseSkill {
         // Apply passive pet buffs (fire res, regen) on each attack
         this.applyPetBuffs(player, wolf);
     }
+    needsRefresh(wolf, effectId, threshold = 40) {
+        try {
+            const effect = wolf.getEffect(effectId);
+            return !effect || effect.duration < threshold;
+        }
+        catch {
+            return true;
+        }
+    }
     applyPetBuffs(player, wolf) {
         const level = this.getLevel(player);
         // Thick Fur - fire resistance
-        if (level >= TAMING_THICK_FUR_LEVEL) {
+        if (level >= TAMING_THICK_FUR_LEVEL && this.needsRefresh(wolf, "fire_resistance")) {
             try {
                 wolf.addEffect("fire_resistance", 1200, { amplifier: 0 });
             }
             catch { }
         }
         // Holy Hound - regeneration
-        if (level >= TAMING_HOLY_HOUND_LEVEL) {
+        if (level >= TAMING_HOLY_HOUND_LEVEL && this.needsRefresh(wolf, "regeneration")) {
             try {
                 wolf.addEffect("regeneration", 1200, { amplifier: 0 });
             }

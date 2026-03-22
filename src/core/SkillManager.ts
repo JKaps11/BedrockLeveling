@@ -253,6 +253,10 @@ export class SkillManager {
     });
   }
 
+  clearPlayer(playerId: string): void {
+    this.repair.clearPlayer(playerId);
+  }
+
   private subscribeRepair(): void {
     // Repair is detected via playerInteractWithBlock on anvil
     world.afterEvents.playerInteractWithBlock.subscribe((event) => {

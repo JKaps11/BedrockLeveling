@@ -228,6 +228,9 @@ export class SkillManager {
             this.fishing.onFishCaught(source);
         });
     }
+    clearPlayer(playerId) {
+        this.repair.clearPlayer(playerId);
+    }
     subscribeRepair() {
         // Repair is detected via playerInteractWithBlock on anvil
         world.afterEvents.playerInteractWithBlock.subscribe((event) => {
