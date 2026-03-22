@@ -1,0 +1,23 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Bedrock McMMO Resources",
+    "description": "Resource pack for Bedrock McMMO",
+    "uuid": "13f5fa4e-033a-4379-b845-1063132df983",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "1155b57e-fee5-419e-8022-5aa2cc4439e4",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "version": [1, 0, 0]
+    }
+  ]
+}

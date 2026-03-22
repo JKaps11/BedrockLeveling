@@ -1,0 +1,39 @@
+name: Build & Release Addon
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Package behavior pack
+        run: zip -r /tmp/mcmmo_bp.mcpack manifest.json scripts/ entities/ loot_tables/ pack_icon.png 2>/dev/null || zip -r /tmp/mcmmo_bp.mcpack manifest.json scripts/ entities/ loot_tables/
+
+      - name: Package resource pack
+        working-directory: bedrock_mcmmo_rp
+        run: zip -r /tmp/mcmmo_rp.mcpack .
+
+      - name: Create .mcaddon
+        run: zip -j bedrock_mcmmo.mcaddon /tmp/mcmmo_bp.mcpack /tmp/mcmmo_rp.mcpack
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bedrock_mcmmo.mcaddon
+          generate_release_notes: true
