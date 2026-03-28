@@ -221,10 +221,22 @@ export class SkillManager {
                 return;
             if (this.antiExploit.isCreativeMode(source))
                 return;
-            // Require minimum use duration to filter out spam casts (1.5+ seconds = likely a catch)
+            // Require minimum use duration to filter out spam casts (1.5+ seconds)
             if (useDuration < 30)
                 return;
-            this.fishing.onFishCaught(source);
+            // Snapshot empty slots, then verify a catch actually landed in inventory
+            const inventory = source.getComponent("minecraft:inventory");
+            const emptyBefore = inventory?.container?.emptySlotsCount;
+            if (emptyBefore === undefined)
+                return;
+            system.runTimeout(() => {
+                if (!source.isValid)
+                    return;
+                const emptyAfter = inventory?.container?.emptySlotsCount;
+                if (emptyAfter !== undefined && emptyAfter < emptyBefore) {
+                    this.fishing.onFishCaught(source);
+                }
+            }, 5);
         });
     }
     clearPlayer(playerId) {
