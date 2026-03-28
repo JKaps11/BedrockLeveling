@@ -6,6 +6,7 @@ import { AbilityManager } from "./core/AbilityManager.js";
 import { AntiExploit } from "./core/AntiExploit.js";
 import { SkillManager } from "./core/SkillManager.js";
 import { xpToNextLevel } from "./core/XpFormula.js";
+import { CreepyCats } from "./systems/CreepyCats.js";
 
 // Initialize managers
 const feedback = new FeedbackManager();
@@ -20,6 +21,7 @@ system.run(() => {
   abilityManager.init();
   antiExploit.init();
   skillManager.init();
+  new CreepyCats().init();
 
   world.sendMessage("§a[McMMO] §7Bedrock McMMO loaded!");
 });
