@@ -1,4 +1,4 @@
-import { world, EntityDamageCause } from "@minecraft/server";
+import { EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -14,11 +14,7 @@ export class TamingSkill extends BaseSkill {
         const tameable = wolf.getComponent("minecraft:tameable");
         if (!tameable)
             return;
-        // Try to find the taming player
-        const owner = tameable.tamedToPlayer;
-        if (!owner)
-            return;
-        const player = world.getAllPlayers().find(p => p.name === owner || p.id === owner);
+        const player = tameable.tamedToPlayer;
         if (!player)
             return;
         const xp = getEntityXp(target.typeId);

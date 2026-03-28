@@ -66,22 +66,22 @@ export class SwordsSkill extends BaseSkill {
       system.clearRun(existing.intervalId);
     }
 
-    let ticksRemaining = BLEED_TICKS;
-    const intervalId = system.runInterval(() => {
+    const state: BleedState = { ticksRemaining: BLEED_TICKS, intervalId: 0 };
+    state.intervalId = system.runInterval(() => {
       try {
-        if (ticksRemaining <= 0 || !entity.isValid) {
-          system.clearRun(intervalId);
+        if (state.ticksRemaining <= 0 || !entity.isValid) {
+          system.clearRun(state.intervalId);
           this.bleedingEntities.delete(entityId);
           return;
         }
         entity.applyDamage(BLEED_DAMAGE, { cause: EntityDamageCause.magic });
-        ticksRemaining--;
+        state.ticksRemaining--;
       } catch {
-        system.clearRun(intervalId);
+        system.clearRun(state.intervalId);
         this.bleedingEntities.delete(entityId);
       }
     }, BLEED_INTERVAL);
 
-    this.bleedingEntities.set(entityId, { ticksRemaining, intervalId });
+    this.bleedingEntities.set(entityId, state);
   }
 }

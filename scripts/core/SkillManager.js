@@ -232,7 +232,8 @@ export class SkillManager {
             system.runTimeout(() => {
                 if (!source.isValid)
                     return;
-                const emptyAfter = inventory?.container?.emptySlotsCount;
+                const freshInventory = source.getComponent("minecraft:inventory");
+                const emptyAfter = freshInventory?.container?.emptySlotsCount;
                 if (emptyAfter !== undefined && emptyAfter < emptyBefore) {
                     this.fishing.onFishCaught(source);
                 }

@@ -28,9 +28,10 @@ export class UnarmedSkill extends BaseSkill {
 
     // Disarm (against players)
     if (target.typeId === "minecraft:player") {
-      const disarmChance = abilityActive
-        ? level * DISARM_CHANCE_PER_LEVEL * 2
-        : level * DISARM_CHANCE_PER_LEVEL;
+      const disarmChance = Math.min(
+        level * DISARM_CHANCE_PER_LEVEL * (abilityActive ? 2 : 1),
+        abilityActive ? 66 : 33
+      );
 
       if (Math.random() * 100 < disarmChance) {
         this.disarmPlayer(target as Player);

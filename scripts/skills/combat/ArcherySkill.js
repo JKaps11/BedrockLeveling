@@ -1,3 +1,4 @@
+import { EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -17,7 +18,7 @@ export class ArcherySkill extends BaseSkill {
         if (bonusDamagePercent > 0) {
             const bonusDamage = damage * (bonusDamagePercent / 100);
             try {
-                target.applyDamage(bonusDamage, { cause: "projectile" });
+                target.applyDamage(bonusDamage, { cause: EntityDamageCause.projectile });
             }
             catch { }
         }

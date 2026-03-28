@@ -64,6 +64,10 @@ export class WoodcuttingSkill extends BaseSkill {
         // Process in batches per tick
         let index = 0;
         const processInterval = system.runInterval(() => {
+            if (!player.isValid) {
+                system.clearRun(processInterval);
+                return;
+            }
             let count = 0;
             while (index < toProcess.length && count < TREE_FELLER_BLOCKS_PER_TICK) {
                 const pos = toProcess[index];
