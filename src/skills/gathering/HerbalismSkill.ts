@@ -26,7 +26,6 @@ export class HerbalismSkill extends BaseSkill {
     const abilityActive = this.isAbilityActive(player);
 
     // Double/Triple drops
-    const dropMult = abilityActive ? TRIPLE_DROP_MULTIPLIER : 1;
     if (abilityActive || this.chanceCheck(player, DOUBLE_DROP_CHANCE_PER_LEVEL)) {
       const itemId = this.getCropDrop(blockType);
       if (itemId) {

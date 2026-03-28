@@ -1,0 +1,33 @@
+{
+  "resource_pack_name": "BedrockMcMMO",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "leveling_cow_penis": {
+      "textures": "textures/items/cow_penis"
+    },
+    "leveling_pig_penis": {
+      "textures": "textures/items/pig_penis"
+    },
+    "leveling_sheep_penis": {
+      "textures": "textures/items/sheep_penis"
+    },
+    "leveling_chicken_penis": {
+      "textures": "textures/items/chicken_penis"
+    },
+    "leveling_zombie_penis": {
+      "textures": "textures/items/zombie_penis"
+    },
+    "leveling_skeleton_penis": {
+      "textures": "textures/items/skeleton_penis"
+    },
+    "leveling_creeper_penis": {
+      "textures": "textures/items/creeper_penis"
+    },
+    "leveling_spider_penis": {
+      "textures": "textures/items/spider_penis"
+    },
+    "leveling_penis_bow": {
+      "textures": "textures/items/penis_bow"
+    }
+  }
+}

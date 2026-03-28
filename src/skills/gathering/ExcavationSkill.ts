@@ -68,7 +68,6 @@ export class ExcavationSkill extends BaseSkill {
         try {
           const item = new ItemStack(treasure.itemId, 1);
           block.dimension.spawnItem(item, block.location);
-          this.ctx.feedback.showXpGain(player, this.skillType, 0); // Override with treasure msg
           player.sendMessage(`§6Treasure Found! §e${treasure.itemId.replace("minecraft:", "")}`);
         } catch {}
         return;

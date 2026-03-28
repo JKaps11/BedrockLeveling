@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -14,11 +14,7 @@ export class TamingSkill extends BaseSkill {
         const tameable = wolf.getComponent("minecraft:tameable");
         if (!tameable)
             return;
-        // Try to find the taming player
-        const owner = tameable.tamedToPlayer;
-        if (!owner)
-            return;
-        const player = world.getAllPlayers().find(p => p.name === owner || p.id === owner);
+        const player = tameable.tamedToPlayer;
         if (!player)
             return;
         const xp = getEntityXp(target.typeId);
@@ -27,7 +23,7 @@ export class TamingSkill extends BaseSkill {
         // Gore: bonus bleed damage
         if (Math.random() * 100 < level * TAMING_GORE_CHANCE_PER_LEVEL) {
             try {
-                target.applyDamage(damage * 0.5, { cause: "entityAttack" });
+                target.applyDamage(damage * 0.5, { cause: EntityDamageCause.entityAttack });
             }
             catch { }
         }
@@ -41,18 +37,30 @@ export class TamingSkill extends BaseSkill {
             }
             catch { }
         }
+        // Apply passive pet buffs (fire res, regen) on each attack
+        this.applyPetBuffs(player, wolf);
+    }
+    needsRefresh(wolf, effectId, threshold = 40) {
+        try {
+            const effect = wolf.getEffect(effectId);
+            return !effect || effect.duration < threshold;
+        }
+        catch (err) {
+            console.warn(`[Taming] needsRefresh failed for effect "${effectId}":`, err);
+            return true;
+        }
     }
     applyPetBuffs(player, wolf) {
         const level = this.getLevel(player);
         // Thick Fur - fire resistance
-        if (level >= TAMING_THICK_FUR_LEVEL) {
+        if (level >= TAMING_THICK_FUR_LEVEL && this.needsRefresh(wolf, "fire_resistance")) {
             try {
                 wolf.addEffect("fire_resistance", 1200, { amplifier: 0 });
             }
             catch { }
         }
         // Holy Hound - regeneration
-        if (level >= TAMING_HOLY_HOUND_LEVEL) {
+        if (level >= TAMING_HOLY_HOUND_LEVEL && this.needsRefresh(wolf, "regeneration")) {
             try {
                 wolf.addEffect("regeneration", 1200, { amplifier: 0 });
             }

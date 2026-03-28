@@ -147,7 +147,6 @@ export class SkillManager {
       // Projectile (archery)
       if (damageSource.damagingProjectile && attacker.typeId === "minecraft:player") {
         this.archery.onArrowHit(attacker as Player, hurtEntity, damage);
-        return;
       }
 
       // Wolf attack → taming
@@ -175,7 +174,7 @@ export class SkillManager {
         }
       }
 
-      // Player gets hit → counter attack / acrobatics checks
+      // Player gets hit by melee → counter attack
       if (hurtEntity.typeId === "minecraft:player" && cause === EntityDamageCause.entityAttack) {
         const victim = hurtEntity as Player;
         const equipment = victim.getComponent("minecraft:equippable");
@@ -185,9 +184,16 @@ export class SkillManager {
         if (SWORD_ITEMS.has(itemId)) {
           this.swords.onDefend(victim, attacker, damage);
         }
+      }
 
-        // Unarmed arrow deflect
-        if (damageSource.damagingProjectile && (!mainhand || itemId === "")) {
+      // Player gets hit by projectile → unarmed arrow deflect
+      if (hurtEntity.typeId === "minecraft:player" && damageSource.damagingProjectile) {
+        const victim = hurtEntity as Player;
+        const equipment = victim.getComponent("minecraft:equippable");
+        const mainhand = equipment?.getEquipment(EquipmentSlot.Mainhand);
+        const itemId = mainhand?.typeId ?? "";
+
+        if (!mainhand || itemId === "") {
           this.unarmed.onArrowDefend(victim, damage);
         }
       }
@@ -235,10 +241,33 @@ export class SkillManager {
   }
 
   private subscribeFishing(): void {
-    // Fishing uses itemUse on fishing rod
-    world.afterEvents.playerInteractWithBlock.subscribe((event) => {
-      // Placeholder - fishing is detected differently
+    // Detect fishing rod reel-in via itemStopUse
+    world.afterEvents.itemStopUse.subscribe((event) => {
+      const { source, itemStack, useDuration } = event;
+      if (!itemStack || itemStack.typeId !== "minecraft:fishing_rod") return;
+      if (this.antiExploit.isCreativeMode(source)) return;
+      // Require minimum use duration to filter out spam casts (1.5+ seconds)
+      if (useDuration < 30) return;
+
+      // Snapshot empty slots, then verify a catch actually landed in inventory
+      const inventory = source.getComponent("minecraft:inventory");
+      const emptyBefore = inventory?.container?.emptySlotsCount;
+      if (emptyBefore === undefined) return;
+
+      system.runTimeout(() => {
+        if (!source.isValid) return;
+        const freshInventory = source.getComponent("minecraft:inventory");
+        const emptyAfter = freshInventory?.container?.emptySlotsCount;
+        if (emptyAfter !== undefined && emptyAfter < emptyBefore) {
+          this.fishing.onFishCaught(source);
+        }
+      }, 5);
     });
+  }
+
+  clearPlayer(playerId: string): void {
+    this.sneakingPlayers.delete(playerId);
+    this.repair.clearPlayer(playerId);
   }
 
   private subscribeRepair(): void {
@@ -246,7 +275,7 @@ export class SkillManager {
     world.afterEvents.playerInteractWithBlock.subscribe((event) => {
       const { player, block } = event;
       if (block.typeId === "minecraft:anvil" || block.typeId === "minecraft:damaged_anvil" || block.typeId === "minecraft:chipped_anvil") {
-        this.repair.onAnvilUse(player);
+        this.repair.onAnvilOpen(player);
       }
     });
   }

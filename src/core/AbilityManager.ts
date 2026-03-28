@@ -72,7 +72,6 @@ interface ReadyState {
 export class AbilityManager {
   private activeAbilities: Map<string, Map<string, AbilityState>> = new Map();
   private readyStates: Map<string, ReadyState> = new Map();
-  private lastSneakAction: Map<string, number> = new Map();
 
   constructor(
     private feedback: FeedbackManager,
@@ -225,6 +224,5 @@ export class AbilityManager {
   clearPlayer(playerId: string): void {
     this.activeAbilities.delete(playerId);
     this.readyStates.delete(playerId);
-    this.lastSneakAction.delete(playerId);
   }
 }

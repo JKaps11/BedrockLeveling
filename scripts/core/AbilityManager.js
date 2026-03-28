@@ -57,7 +57,6 @@ export class AbilityManager {
         this.playerData = playerData;
         this.activeAbilities = new Map();
         this.readyStates = new Map();
-        this.lastSneakAction = new Map();
     }
     init() {
         system.runInterval(() => {
@@ -198,6 +197,5 @@ export class AbilityManager {
     clearPlayer(playerId) {
         this.activeAbilities.delete(playerId);
         this.readyStates.delete(playerId);
-        this.lastSneakAction.delete(playerId);
     }
 }

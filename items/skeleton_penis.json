@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.40",
+  "minecraft:item": {
+    "description": {
+      "identifier": "leveling:skeleton_penis",
+      "menu_category": { "category": "items" }
+    },
+    "components": {
+      "minecraft:icon": "leveling_skeleton_penis",
+      "minecraft:display_name": { "value": "Skeleton Penis" },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}

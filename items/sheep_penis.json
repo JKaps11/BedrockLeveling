@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.40",
+  "minecraft:item": {
+    "description": {
+      "identifier": "leveling:sheep_penis",
+      "menu_category": { "category": "items" }
+    },
+    "components": {
+      "minecraft:icon": "leveling_sheep_penis",
+      "minecraft:display_name": { "value": "Sheep Penis" },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}

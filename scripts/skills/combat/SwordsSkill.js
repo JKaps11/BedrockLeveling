@@ -1,4 +1,4 @@
-import { system } from "@minecraft/server";
+import { system, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -29,7 +29,7 @@ export class SwordsSkill extends BaseSkill {
                 if (entity.id === target.id)
                     continue;
                 try {
-                    entity.applyDamage(damage * 0.5, { cause: "entityAttack" });
+                    entity.applyDamage(damage * 0.5, { cause: EntityDamageCause.entityAttack });
                     this.applyBleed(entity);
                 }
                 catch { }
@@ -41,7 +41,7 @@ export class SwordsSkill extends BaseSkill {
         if (this.chanceCheck(player, COUNTER_ATTACK_CHANCE_PER_LEVEL)) {
             try {
                 const counterDamage = damage * COUNTER_ATTACK_DAMAGE_MULT;
-                attacker.applyDamage(counterDamage, { cause: "entityAttack" });
+                attacker.applyDamage(counterDamage, { cause: EntityDamageCause.entityAttack });
                 player.sendMessage("§6Counter Attack!");
             }
             catch { }
@@ -54,22 +54,22 @@ export class SwordsSkill extends BaseSkill {
         if (existing) {
             system.clearRun(existing.intervalId);
         }
-        let ticksRemaining = BLEED_TICKS;
-        const intervalId = system.runInterval(() => {
+        const state = { ticksRemaining: BLEED_TICKS, intervalId: 0 };
+        state.intervalId = system.runInterval(() => {
             try {
-                if (ticksRemaining <= 0 || !entity.isValid) {
-                    system.clearRun(intervalId);
+                if (state.ticksRemaining <= 0 || !entity.isValid) {
+                    system.clearRun(state.intervalId);
                     this.bleedingEntities.delete(entityId);
                     return;
                 }
-                entity.applyDamage(BLEED_DAMAGE, { cause: "magic" });
-                ticksRemaining--;
+                entity.applyDamage(BLEED_DAMAGE, { cause: EntityDamageCause.magic });
+                state.ticksRemaining--;
             }
             catch {
-                system.clearRun(intervalId);
+                system.clearRun(state.intervalId);
                 this.bleedingEntities.delete(entityId);
             }
         }, BLEED_INTERVAL);
-        this.bleedingEntities.set(entityId, { ticksRemaining, intervalId });
+        this.bleedingEntities.set(entityId, state);
     }
 }

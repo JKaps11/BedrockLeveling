@@ -1,4 +1,4 @@
-import { EquipmentSlot } from "@minecraft/server";
+import { EquipmentSlot, EntityDamageCause } from "@minecraft/server";
 import { SkillType } from "../../types/index.js";
 import { BaseSkill } from "../BaseSkill.js";
 import { getEntityXp } from "../../data/CombatXpValues.js";
@@ -18,15 +18,13 @@ export class UnarmedSkill extends BaseSkill {
         const bonusDamage = Math.min(level * IRON_ARM_DAMAGE_PER_LEVEL, IRON_ARM_MAX_BONUS);
         if (bonusDamage > 0) {
             try {
-                target.applyDamage(bonusDamage, { cause: "entityAttack" });
+                target.applyDamage(bonusDamage, { cause: EntityDamageCause.entityAttack });
             }
             catch { }
         }
         // Disarm (against players)
         if (target.typeId === "minecraft:player") {
-            const disarmChance = abilityActive
-                ? level * DISARM_CHANCE_PER_LEVEL * 2
-                : level * DISARM_CHANCE_PER_LEVEL;
+            const disarmChance = Math.min(level * DISARM_CHANCE_PER_LEVEL * (abilityActive ? 2 : 1), abilityActive ? 66 : 33);
             if (Math.random() * 100 < disarmChance) {
                 this.disarmPlayer(target);
             }
