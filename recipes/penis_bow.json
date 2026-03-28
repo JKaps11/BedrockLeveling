@@ -1,0 +1,24 @@
+{
+  "format_version": "1.21.40",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "leveling:penis_bow"
+    },
+    "tags": ["crafting_table"],
+    "ingredients": [
+      { "item": "leveling:cow_penis" },
+      { "item": "leveling:pig_penis" },
+      { "item": "leveling:sheep_penis" },
+      { "item": "leveling:chicken_penis" },
+      { "item": "leveling:zombie_penis" },
+      { "item": "leveling:skeleton_penis" },
+      { "item": "leveling:creeper_penis" },
+      { "item": "leveling:spider_penis" },
+      { "item": "minecraft:bow" }
+    ],
+    "result": {
+      "item": "leveling:penis_bow",
+      "count": 1
+    }
+  }
+}
